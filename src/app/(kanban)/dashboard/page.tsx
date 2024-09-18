@@ -132,7 +132,7 @@ export default function KanbanBoard() {
       <h1 className="text-2xl font-bold mb-4">Kanban Board</h1>
       <div className="flex space-x-4">
         {statusOptions.map(status => (
-          <div key={status.value} className="flex-1" data-status={status.value}>
+          <div key={status.value} className="flex-1 " data-status={status.value}>
             <h2 className="text-lg font-semibold mb-2">{status.label}</h2>
             <div
               ref={el => {
@@ -157,7 +157,7 @@ export default function KanbanBoard() {
                       deleteTask={deleteTask}
                       setEditingTask={setEditingTask}
                       onDragEnd={onDragEnd}
-                      columnRef={columnRefs.current[status.value as $Enums.Status]}
+                      // columnRef={columnRefs.current[status.value as $Enums.Status]}
                     />
                   </Reorder.Item>
                 ))}
@@ -238,12 +238,12 @@ export default function KanbanBoard() {
   )
 }
 
-function TaskCard({ task, deleteTask, setEditingTask, onDragEnd, columnRef }: { 
+function TaskCard({ task, deleteTask, setEditingTask, onDragEnd,  }: { 
   task: Task, 
   deleteTask: (id: string) => void, 
   setEditingTask: (task: Task) => void,
   onDragEnd: (task: Task, newStatus: $Enums.Status) => void,
-  columnRef: HTMLDivElement | null
+  // columnRef: HTMLDivElement | null // Still receiving the column reference
 }) {
   const controls = useDragControls()
 
@@ -251,8 +251,8 @@ function TaskCard({ task, deleteTask, setEditingTask, onDragEnd, columnRef }: {
     <Reorder.Item value={task} dragListener={false} dragControls={controls}>
       <motion.div
         drag
-        dragConstraints={columnRef ? columnRef  : undefined}
-        dragElastic={0.1}
+        dragConstraints={undefined} // No constraints to allow free movement across columns
+        dragElastic={0.2} // You can adjust this for how "snappy" or "elastic" the drag is
         dragControls={controls}
         onDragEnd={(event, info) => {
           const elements = document.elementsFromPoint(info.point.x, info.point.y)
@@ -264,7 +264,7 @@ function TaskCard({ task, deleteTask, setEditingTask, onDragEnd, columnRef }: {
             }
           }
         }}
-        whileDrag={{ scale: 1.05, boxShadow: "0px 10px 25px rgba(0,0,0,0.1)" }}
+        whileDrag={{ scale: 1.05, boxShadow: "0px 10px 25px rgba(0,0,0,0.1)" }} // For visual feedback during dragging
       >
         <Card className="mb-2 cursor-move" onPointerDown={(e) => controls.start(e)}>
           <CardHeader>
@@ -282,8 +282,6 @@ function TaskCard({ task, deleteTask, setEditingTask, onDragEnd, columnRef }: {
             <CardDescription>{task.description}</CardDescription>
           </CardHeader>
           <CardContent>
-
-          {/* {task.dueDate || "no data"} */}
             <p>Due: {task.dueDate ? new Date(task!.dueDate).toLocaleDateString() : "No due date"}</p>
           </CardContent>
           <CardFooter>
