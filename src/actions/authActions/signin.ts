@@ -1,12 +1,23 @@
 import { prisma } from "@/prisma/prisma";
 import { dataVal } from "@/validations/auth/signin";
 import httpError from "http-errors"
+import bcrypt from "bcryptjs"
 interface IncomingData{
     email: string
     password: string
 }
 
-export const signin = async (data:IncomingData)=>{
+interface ReturnData  {
+    
+    id:string,
+        email:string,
+        name:string,
+        password:string
+    
+}
+
+
+export const signin = async (data:IncomingData):Promise<ReturnData>=>{
     const {email,password} = data;
 
     if (!email || !password) {
@@ -36,12 +47,17 @@ export const signin = async (data:IncomingData)=>{
         throw new httpError.NotFound("Account not found")
     }
 
-    if (searchAccount.password != validateData.data.password) {
+    // verifying password
+    const isPasswordValid = await bcrypt.compare(validateData.data.password,searchAccount.password)
+
+    if (!isPasswordValid) {
         throw new httpError.Unauthorized("Invalid password")
     }
 
     // removing password
     searchAccount.password = "********"
+
+ 
 
     return searchAccount
 

@@ -1,14 +1,25 @@
 import { prisma } from "@/prisma/prisma";
 import { verifyAuthToken } from "./helpers/jwt";
-
+import httpError from "http-errors";
 interface IncomingData{
     token:string
 }
 
-export const currentUser = async (data:IncomingData)=>{
+interface ReturnData  {
+    
+    id:string,
+    email:string,
+    name:string,
+    password:string
+
+}
+
+export const currentUser = async (data:IncomingData):Promise<ReturnData>=>{
     const token = data.token;
     
     const payload = verifyAuthToken(token)
+
+    // console.log(payload)
 
     const user = await prisma.user.findFirst({
         where:{
@@ -19,8 +30,12 @@ export const currentUser = async (data:IncomingData)=>{
             email:true,
             name:true
         }
-    })
+    }).catch((e)=>{throw new httpError.NotFound(e.message || "User not found")})
 
-    return user
+    if (!user) {
+        throw new httpError.NotFound("User not found")}
+
+     user.id = "$$$$$"
+    return {...user,password:"********"} as ReturnData
 }
 

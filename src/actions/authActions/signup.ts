@@ -1,19 +1,30 @@
 import { prisma } from "@/prisma/prisma";
 import { dataVal } from "@/validations/auth/signup";
 import httpError from "http-errors"
+import bcrypt from "bcryptjs"
 interface IncomingData{
     name: string
     email: string
     password: string
 }
+interface ReturnData  {
+    
+    id:string,
+    email:string,
+    name:string,
+    password:string
 
-export const signup = async (data:IncomingData)=>{
+}
+
+
+export const signup = async (data:IncomingData):Promise<ReturnData>=>{
     const {email,password} = data;
 
     if (!email || !password || !data.name) {
-        throw new httpError.NotFound   ("Email and password are required")
+        throw new httpError.NotFound("Email and password are required")
     }
 
+    // console.log(data)
     const validateData = dataVal.safeParse(data);
 
     if (!validateData.success){
@@ -34,14 +45,18 @@ export const signup = async (data:IncomingData)=>{
         throw new httpError.Conflict("Account already exists")
     }
 
+    // encrypting password
+    const hashedPassword = await bcrypt.hash(validateData.data.password,10)
+
     // creating new Account
     const user = await prisma.user.create({
         data:{
             email : validateData.data.email,
-            name : validateData.data.fullName,
-            password : validateData.data.password
+            name : validateData.data.name,
+            password : hashedPassword
         }
-    }).catch(e=>{throw new httpError.BadRequest(e.message || "failed to create account")})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }).catch((e:any)=>{throw new httpError.BadRequest(e?.message || "failed to create account")})
 
 
 

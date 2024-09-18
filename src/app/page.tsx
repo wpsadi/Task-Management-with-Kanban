@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Navbar} from '@/components/components-navbar'
-import { Footer } from '@/components/components-footer'
 
 export default function HomePage() {
   return (
@@ -27,7 +26,7 @@ export default function HomePage() {
         <section className="py-16 px-6">
           <div className="container mx-auto">
             <h2 className="text-3xl font-semibold text-center mb-8">Key Features</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <FeatureCard 
                 title="Visual Task Management" 
                 description="Organize tasks into columns representing different stages of your workflow."
@@ -36,10 +35,10 @@ export default function HomePage() {
                 title="Drag and Drop" 
                 description="Easily move tasks between columns as they progress."
               />
-              <FeatureCard 
+              {/* <FeatureCard 
                 title="Collaboration" 
                 description="Work together with your team in real-time on shared boards."
-              />
+              /> */}
             </div>
           </div>
         </section>

@@ -6,5 +6,5 @@ import { passwordSchema } from "./password";
 export const dataVal = z.object({
   email: emailVal,
   password: passwordSchema,
-  fullName: nameSchema,
+  name: nameSchema,
 });

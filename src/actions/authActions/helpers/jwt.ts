@@ -17,6 +17,7 @@ export const createAuthToken = (data:IncomingData)=>{
 export const verifyAuthToken =  (token:string):IncomingData=>{
     try{
         return JWT.verify(token,env.auth.jwt.secret) as IncomingData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }catch(e:any){
         throw new httpError.Unauthorized(e.message || "Invalid Auth Token")
     }

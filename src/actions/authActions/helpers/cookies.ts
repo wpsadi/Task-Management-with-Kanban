@@ -2,6 +2,7 @@
  
 import { env } from '@/env'
 import { cookies } from 'next/headers'
+import httpError from "http-errors"
  
 export async function createCookie(token:string) {
   cookies().set({
@@ -15,4 +16,12 @@ export async function createCookie(token:string) {
 
 export async function removeCookie(){
   cookies().delete('auth')
+}
+
+export async function getCookie(){
+  const authCookie = cookies().get('auth')
+  if (!authCookie){
+    throw new httpError.Unauthorized("No Auth Cookie")
+  }
+  return authCookie
 }
