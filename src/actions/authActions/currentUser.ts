@@ -30,7 +30,9 @@ export const currentUser = async (data:IncomingData):Promise<ReturnData>=>{
             email:true,
             name:true
         }
-    }).catch((e)=>{throw new httpError.NotFound(e.message || "User not found")})
+    }).catch((e)=>{
+        const error = e as Error
+        throw new httpError.NotFound(error.message || "User not found")})
 
     if (!user) {
         throw new httpError.NotFound("User not found")}
