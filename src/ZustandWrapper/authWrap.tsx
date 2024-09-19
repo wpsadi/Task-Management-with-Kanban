@@ -1,15 +1,15 @@
 "use client";
 import { useAuthStore } from "@/store/authStore";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 
 function AuthWrap() {
     const authStore = useAuthStore();
-    const [once, setOnce] = useState(false);
+    
     useEffect(()=>{
-        if(!once){
+        if (authStore.isLoggedIn==null){
             authStore.reinstate()
-            setOnce(true)
         }
+        
     },[])
     return null
 }
