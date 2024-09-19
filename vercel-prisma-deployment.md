@@ -12,5 +12,5 @@ if prisma in root directory
 `"postinstall": "prisma generate",`
 
 if prisma is inside src
-`"postinstall": "cd src & prisma generate",`
+`"postinstall": "prisma generate --schema=src/prisma/schema.prisma",`
 
