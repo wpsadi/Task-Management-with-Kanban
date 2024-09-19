@@ -53,7 +53,10 @@ export const useAuthStore = create<IAuthStore>()(
           set({ isLoggedIn: true });
           set({accountLoading:false})
         } catch (e) {
-            set({accountLoading:false})
+            set({accountLoading:false,
+            isLoggedIn: false,
+            accountName: ""
+            })
           // return { error: e.response.data.message };
         }
       },
