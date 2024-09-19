@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import httpError from "http-errors"
+import httpError, { HttpError } from "http-errors"
 import { createAuthToken } from "@/actions/authActions/helpers/jwt";
 import { createCookie } from "@/actions/authActions/helpers/cookies";
 import { signup } from "@/actions/authActions/signup";
@@ -32,8 +32,8 @@ export const POST = async (req:NextRequest)=>{
             message: "Signed up successfully",
         })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }catch(e:any ){
+    }catch(error){
+        const e = error as HttpError;
         // error will always be some http, thats how everything is written
         return NextResponse.json({
             success:false,

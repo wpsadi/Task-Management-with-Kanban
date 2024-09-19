@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import httpError from "http-errors"
+import httpError, { HttpError } from "http-errors"
 import { deleteNewTask } from "@/actions/TaskActions/deleteTask";
 export const DELETE = async (req:NextRequest)=>{
     try{
@@ -25,8 +25,9 @@ export const DELETE = async (req:NextRequest)=>{
         })
 
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }catch(e:any ){
+
+    }catch(error){
+        const e = error as HttpError;
         // error will always be some http, thats how everything is written
         return NextResponse.json({
             success:false,

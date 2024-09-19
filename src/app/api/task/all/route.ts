@@ -1,4 +1,5 @@
 import { ListAllTasks } from "@/actions/TaskActions/AllTasks"
+import { HttpError } from "http-errors"
 import { NextResponse } from "next/server"
 
 export const GET = async ()=>{
@@ -13,8 +14,9 @@ export const GET = async ()=>{
             message: "Tasks fetched successfully",
         })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }catch(e:any ){
+
+    }catch(error){
+        const e = error as HttpError;
         // error will always be some http, thats how everything is written
         return NextResponse.json({
             success:false,
